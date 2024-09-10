@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="main">
+      <div class="principal">
+        <h3>Hola a la aplicacion {{name_app}}</h3>
+        <button @click="count++" class="btnStyle">Clickeame: {{count}}</button>
+
+        <div>
+          <form>
+            <fieldset class="cont">
+              <label> Nombre </label>
+              <input
+                type="text"
+                v-model="name"
+                placeholder="Tu nombre aqui"
+                name=""
+              />
+            </fieldset>
+            <label> Tu nombre es: <span>{{name}}</span> </label>
+          </form>
+        </div>
+        <div>
+          <fieldset class="cont">
+            <label> Numero 1 </label>
+            <input
+              type="number"
+              v-model="num1"
+              placeholder="Escribe el primer numero aqui"
+            />
+            <label> Numero 2 </label>
+            <input
+              type="number"
+              v-model="num2"
+              placeholder="Escribe el segundo numero aqui"
+            />
+          </fieldset>
+          <label>
+            La suma de: <span>{{num1}} y {{num2}} es {{suma}}</span>
+          </label>
+        </div>
+        <button @click="sumaNum" class="btnStyle">S U M A R</button>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const name_app = ref("Mi primera app!");
+          const count = ref(0);
+          const name = ref("");
+          const num1 = ref(0);
+          const num2 = ref(0);
+          const suma = ref(0);
+
+          function sumaNum() {
+            suma.value = num1.value + num2.value;
+          }
+
+          return {
+            name_app,
+            count,
+            name,
+            num1,
+            num2,
+            suma,
+            sumaNum,
+          };
+        },
+      }).mount("#main");
+    </script>
+  </body>
+</html>

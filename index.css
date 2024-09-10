@@ -1,0 +1,16 @@
+.principal {
+  margin: 15px;
+  padding: 10px;
+  background-color: #f9f2ff;
+  border: 2px solid black;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.cont {
+  background-color: #e9cdff;
+  margin: 10px;
+}
+
+.btnStyle {
+}
