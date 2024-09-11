@@ -47,6 +47,20 @@
           </label>
         </div>
         <button @click="sumaNum" class="btnStyle">S U M A R</button>
+
+        <fieldset class="cont">
+          <label> Nombre </label>
+          <input type="text" v-model="nameU" />
+          <label> Rol </label>
+          <input type="text" v-model="rol" />
+        </fieldset>
+        <button @click="addUser" class="btnStyle">Añadir usuario</button>
+        <h1>Array de users</h1>
+        <ul>
+          <li v-for="user in users" :key="user.nameU">
+            {{ user.nameU }} - {{user.rol}}
+          </li>
+        </ul>
       </div>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -62,9 +76,35 @@
           const num1 = ref(0);
           const num2 = ref(0);
           const suma = ref(0);
+          const users = ref([
+            {
+              nameU: "Aleksey",
+              rol: "front",
+            },
+            {
+              nameU: "Yahir",
+              rol: "back",
+            },
+            {
+              nameU: "Abdel",
+              rol: "Apoyo",
+            },
+          ]);
+          const nameU = ref("");
+          const rol = ref("");
 
           function sumaNum() {
             suma.value = num1.value + num2.value;
+          }
+
+          function addUser() {
+            let temporal = {
+              nameU: nameU.value,
+              rol: rol.value,
+            };
+            users.value.push(temporal);
+            nameU.value = "";
+            rol.value = "";
           }
 
           return {
@@ -75,6 +115,10 @@
             num2,
             suma,
             sumaNum,
+            users,
+            nameU,
+            rol,
+            addUser,
           };
         },
       }).mount("#main");
