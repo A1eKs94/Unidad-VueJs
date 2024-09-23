@@ -12,5 +12,23 @@
   margin: 10px;
 }
 
-.btnStyle {
+.tablaUsers th {
+  background-color: #6537aa;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  border: 2px solid black;
+}
+
+.tablaUsers {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.tablaUsers th,
+.tablaUsers td {
+  border: 2px solid black;
+  padding: 8px;
 }

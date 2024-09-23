@@ -31,7 +31,27 @@
           </form>
         </div>
       </div>
-      <h1 v-if="isLogin">Bienvenido Usuario</h1>
+      <div v-if="isLogin">
+        <h1>Bienvenido Usuario</h1>
+        <table class="tablaUsers">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Nombre de usuario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="user in users" :key="user.email">
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.username }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -45,12 +65,16 @@
           const email = ref("ruun_19@alu.uabcs.mx");
           const password = ref("1234567");
           const isLogin = ref(false);
+          const userData = ref([]);
+          const users = ref([]);
 
           return {
             name_app,
             email,
             password,
             isLogin,
+            userData,
+            users,
           };
         },
         methods: {
@@ -64,6 +88,7 @@
                     if (e.password == this.password) {
                       console.log("Password exitosa");
                       this.isLogin = true;
+                      this.users = users;
                     }
                   }
                 });
