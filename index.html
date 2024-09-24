@@ -1,82 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
-    <div id="main">
-      <div class="principal">
-        <h3>Hola a la aplicacion {{name_app}}</h3>
-        <button @click="count++" class="btnStyle">Clickeame: {{count}}</button>
 
-        <div>
-          <form>
-            <fieldset class="cont">
-              <label> Nombre </label>
-              <input
-                type="text"
-                v-model="name"
-                placeholder="Tu nombre aqui"
-                name=""
-              />
-            </fieldset>
-            <label> Tu nombre es: <span>{{name}}</span> </label>
-          </form>
-        </div>
-        <div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div class="principal">
+      <h1>VueJS</h1>
+      <h3>Hola a la aplicacion {{ name_app }}</h3>
+      <div>
+        <form @submit.prevent="login" v-if="!isLogin">
           <fieldset class="cont">
-            <label> Numero 1 </label>
-            <input
-              type="number"
-              v-model="num1"
-              placeholder="Escribe el primer numero aqui"
-            />
-            <label> Numero 2 </label>
-            <input
-              type="number"
-              v-model="num2"
-              placeholder="Escribe el segundo numero aqui"
-            />
+            <label>Correo Electronico</label>
+            <input type="email" v-model="email" placeholder="Correo Electronico" />
+            <label>Contraseña</label>
+            <input type="password" v-model="password" placeholder="Contraseña" />
+            <button type="submit">Iniciar Sesion</button>
           </fieldset>
-          <label>
-            La suma de: <span>{{num1}} y {{num2}} es {{suma}}</span>
-          </label>
-        </div>
-        <button @click="sumaNum" class="btnStyle">S U M A R</button>
+        </form>
       </div>
     </div>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <div v-if="isLogin">
+      <h1>Bienvenido Usuario</h1>
+      <table class="tablaUsers">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Nombre de usuario</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.email">
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+              <button>Modificar</button>
+              <button @click="eliminar(user.email)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-    <script>
-      const { createApp, ref } = Vue;
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-      createApp({
-        setup() {
-          const name_app = ref("Mi primera app!");
-          const count = ref(0);
-          const name = ref("");
-          const num1 = ref(0);
-          const num2 = ref(0);
-          const suma = ref(0);
+  <script>
+    const { createApp, ref } = Vue;
 
-          function sumaNum() {
-            suma.value = num1.value + num2.value;
-          }
+    createApp({
+      setup() {
+        const name_app = ref("Mi primera app!");
+        const email = ref("ruun_19@alu.uabcs.mx");
+        const password = ref("1234567");
+        const isLogin = ref(false);
+        const userData = ref([]);
+        const users = ref([]);
 
-          return {
-            name_app,
-            count,
-            name,
-            num1,
-            num2,
-            suma,
-            sumaNum,
-          };
+        return {
+          name_app,
+          email,
+          password,
+          isLogin,
+          userData,
+          users,
+        };
+      },
+      methods: {
+        login() {
+          fetch("users.json")
+            .then((response) => response.json())
+            .then((users) => {
+              users.forEach((e) => {
+                if (e.email == this.email) {
+                  console.log("Correo exitoso");
+                  if (e.password == this.password) {
+                    console.log("Password exitosa");
+                    this.isLogin = true;
+                    this.users = users;
+                  }
+                }
+              });
+            });
         },
-      }).mount("#main");
-    </script>
-  </body>
+        eliminar(email) {
+          for (let i = 0; this.users.length > i; i--) {
+            if (this.users.email = email) {
+              let spliced = this.users.splice(0, 1)
+            }
+            break;
+          }
+        }
+      },
+    }).mount("#main");
+  </script>
+</body>
+
 </html>
