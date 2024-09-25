@@ -34,29 +34,52 @@
       </div>
       <div v-if="isLogin">
         <h1>Bienvenido Usuario</h1>
-        <table class="tablaUsers">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Nombre de usuario</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in users" :key="user.email">
-              <td>{{ user.id }}</td>
-              <td>{{ user.name }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.username }}</td>
-              <td>
-                <button @click="handleUser(user)">Modificar</button>
-                <button @click="eliminar(user.email)">Eliminar</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+        <div v-if="!showAddUserForm">
+          <table class="tablaUsers">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Nombre de usuario</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="user in users" :key="user.email">
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.username }}</td>
+                <td>
+                  <button @click="handleUser(user)">Modificar</button>
+                  <button @click="eliminar(user.email)">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button @click="showAddUserForm = true">Añadir Usuario</button>
+        </div>
+
+        <div v-if="showAddUserForm">
+          <fieldset class="cont">
+            <h2>Añadir Usuario</h2>
+            <form @submit.prevent="addUser">
+              <label>ID</label>
+              <input type="text" v-model="newUser.id" required />
+              <label>Nombre</label>
+              <input type="text" v-model="newUser.name" required />
+              <label>Email</label>
+              <input type="email" v-model="newUser.email" required />
+              <label>Nombre de usuario</label>
+              <input type="text" v-model="newUser.username" required />
+              <button type="submit">Añadir</button>
+            </form>
+          </fieldset>
+        </div>
+
         <div v-if="editUser">
           <fieldset class="cont">
             <h2>Modificar Usuario</h2>
@@ -87,6 +110,8 @@
           const isLogin = ref(false);
           const users = ref([]);
           const editUser = ref(null);
+          const newUser = ref({ id: "", name: "", email: "", username: "" });
+          const showAddUserForm = ref(false);
 
           onMounted(() => {
             const storedUser = localStorage.getItem("loggedUser");
@@ -133,6 +158,12 @@
             }
           };
 
+          const addUser = () => {
+            users.value.push({ ...newUser.value });
+            newUser.value = { id: "", name: "", email: "", username: "" };
+            showAddUserForm.value = false;
+          };
+
           return {
             name_app,
             email,
@@ -144,6 +175,9 @@
             eliminar,
             handleUser,
             updateUser,
+            newUser,
+            showAddUserForm,
+            addUser,
           };
         },
       }).mount("#main");
