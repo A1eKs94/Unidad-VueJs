@@ -32,153 +32,27 @@
           </form>
         </div>
       </div>
-      <div v-if="isLogin">
-        <h1>Bienvenido Usuario</h1>
-
-        <div v-if="!showAddUserForm">
-          <table class="tablaUsers">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Nombre de usuario</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="user in users" :key="user.email">
-                <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.username }}</td>
-                <td>
-                  <button @click="handleUser(user)">Modificar</button>
-                  <button @click="eliminar(user.email)">Eliminar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <button @click="showAddUserForm = true">Añadir Usuario</button>
-        </div>
-
-        <div v-if="showAddUserForm">
-          <fieldset class="cont">
-            <h2>Añadir Usuario</h2>
-            <form @submit.prevent="addUser">
-              <label>ID</label>
-              <input type="text" v-model="newUser.id" required />
-              <label>Nombre</label>
-              <input type="text" v-model="newUser.name" required />
-              <label>Email</label>
-              <input type="email" v-model="newUser.email" required />
-              <label>Nombre de usuario</label>
-              <input type="text" v-model="newUser.username" required />
-              <button type="submit">Añadir</button>
-            </form>
-          </fieldset>
-        </div>
-
-        <div v-if="editUser">
-          <fieldset class="cont">
-            <h2>Modificar Usuario</h2>
-            <form @submit.prevent="updateUser">
-              <label>Nombre</label>
-              <input type="text" v-model="editUser.name" />
-              <label>Email</label>
-              <input type="email" v-model="editUser.email" />
-              <label>Nombre de usuario</label>
-              <input type="text" v-model="editUser.username" />
-              <button type="submit">Guardar</button>
-            </form>
-          </fieldset>
-        </div>
-      </div>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <script>
-      const { createApp, ref, onMounted } = Vue;
-
+      const { createApp, ref } = Vue;
       createApp({
-        setup() {
-          const name_app = ref("Mi primera app!");
-          const email = ref("");
-          const password = ref("");
-          const isLogin = ref(false);
-          const users = ref([]);
-          const editUser = ref(null);
-          const newUser = ref({ id: "", name: "", email: "", username: "" });
-          const showAddUserForm = ref(false);
-
-          onMounted(() => {
-            const storedUser = localStorage.getItem("loggedUser");
-            if (storedUser) {
-              isLogin.value = true;
-              users.value = JSON.parse(storedUser).users;
-            }
-            fetch("users.json")
-              .then((response) => response.json())
-              .then((usersData) => {
-                users.value = usersData;
-              });
-          });
-
-          const login = () => {
-            const user = users.value.find((u) => u.email === email.value);
-            if (user) {
-              console.log("Inicio de sesión exitoso");
-              isLogin.value = true;
-              localStorage.setItem("loggedUser", JSON.stringify(user));
-            } else {
-              console.log("Credenciales incorrectas");
-            }
-          };
-
-          const eliminar = (email) => {
-            const index = users.value.findIndex((user) => user.email === email);
-            if (index !== -1) {
-              users.value.splice(index, 1);
-            }
-          };
-
-          const handleUser = (user) => {
-            editUser.value = user;
-          };
-
-          const updateUser = () => {
-            const index = users.value.findIndex(
-              (user) => user.email === editUser.value.email
-            );
-            if (index !== -1) {
-              users.value[index] = editUser.value;
-              editUser.value = null;
-            }
-          };
-
-          const addUser = () => {
-            users.value.push({ ...newUser.value });
-            newUser.value = { id: "", name: "", email: "", username: "" };
-            showAddUserForm.value = false;
-          };
-
+        data() {
           return {
-            name_app,
-            email,
-            password,
-            isLogin,
-            users,
-            editUser,
-            login,
-            eliminar,
-            handleUser,
-            updateUser,
-            newUser,
-            showAddUserForm,
-            addUser,
+            email: "",
+            password: "",
+            is_Log: false,
           };
+        },
+        methods: {
+          login() {
+            localStorage.setItem("email", this.email);
+            localStorage.setItem("password", this.password);
+
+            window.location.href = "movies.html";
+          },
         },
       }).mount("#main");
     </script>

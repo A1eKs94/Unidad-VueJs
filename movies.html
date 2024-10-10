@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Cards</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="movies.css" />
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar">
+        <div class="container">
+          <a class="logo">Mi Aplicación</a>
+          <ul class="menu">
+            <li><a href="movies.html">Movies</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container">
+        <h1>MovieDB</h1>
+        <div class="card-container">
+          <div
+            class="card"
+            v-for="(movie, index) in movies"
+            :key="index"
+            @click="goToMovie(movie.id)"
+          >
+            <img :src="getImageUrl(movie.poster_path)" alt="Movie Poster" />
+            <div>
+              <h2>{{ movie.title }}</h2>
+              <p>Fecha de estreno</p>
+              <p>{{ movie.release_date }}</p>
+              <p>Popularidad</p>
+              <p>{{ movie.vote_average.toFixed(1) }}</p>
+            </div>
+            <a href="#" class="button">Ver Detalles</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const { createApp, ref, onMounted } = Vue;
+
+      createApp({
+        setup() {
+          const movies = ref([]);
+          const apiKey =
+            "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NTQxODk4NTc3NWNjZTRkMjZjNjc0NTc1ZjRmNDliMiIsIm5iZiI6MTcyODU4ODI4OC4zMjMzMDUsInN1YiI6IjY3MDc0YjA2ZTQ2YTEyYTE5NDE5ZTg4OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.DmUsxjPFTghtSyzJSlylzJr62a4O8Wj7gISqJoN6mCM"; // Reemplaza 'TU_CLAVE_DE_API' con tu clave real de TMDb
+          const apiUrl = "https://api.themoviedb.org/3/discover/movie";
+
+          const getImageUrl = (path) => {
+            return path
+              ? `https://image.tmdb.org/t/p/w500${path}`
+              : "https://via.placeholder.com/150";
+          };
+
+          const fetchMovies = () => {
+            const myHeaders = new Headers();
+            myHeaders.append("Authorization", `Bearer ${apiKey}`);
+
+            const requestOptions = {
+              method: "GET",
+              headers: myHeaders,
+              redirect: "follow",
+            };
+
+            fetch(apiUrl, requestOptions)
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data.results);
+                movies.value = data.results;
+              })
+              .catch((error) => console.error("Error:", error));
+          };
+
+          const goToMovie = (id) => {
+            window.location.href = `movie.html?id=${id}`;
+          };
+
+          onMounted(() => {
+            const email = localStorage.getItem("email");
+            const password = localStorage.getItem("password");
+
+            if (!email || !password) {
+              window.location.href = "index.html";
+            } else {
+              fetchMovies();
+            }
+          });
+
+          return {
+            movies,
+            getImageUrl,
+            goToMovie,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
